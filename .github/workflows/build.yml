@@ -1,0 +1,32 @@
+name: PlatformIO CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build Firmware
+        run: pio run
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware
+          path: |
+            .pio/build/*/firmware.hex
+            .pio/build/*/firmware.bin
